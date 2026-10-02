@@ -280,24 +280,40 @@ function parseCv(markdown) {
   return { name, role, contacts, sections };
 }
 
-export function siteTitle(markdown) {
-  const heading = parseBlocks(markdown).find(
-    (block) => block.type === "h" && block.level === 1
+function sectionBlocks(markdown, lang) {
+  const wanted = lang === "en" ? "en" : "ru";
+  const selected = [];
+  let open = false;
+
+  for (const block of parseBlocks(markdown)) {
+    if (block.type === "h" && block.level === 1) {
+      open = block.text.trim().toLowerCase() === wanted;
+      continue;
+    }
+    if (open) selected.push(block);
+  }
+
+  return selected;
+}
+
+export function siteTitle(markdown, lang) {
+  const heading = sectionBlocks(markdown, lang).find(
+    (block) => block.type === "h" && block.level === 2
   );
   return heading ? stripMarkers(heading.text) : "";
 }
 
-export function renderProse(markdown) {
-  const blocks = parseBlocks(markdown);
-  const titleAt = blocks.findIndex(
-    (block) => block.type === "h" && block.level === 1
-  );
-  const body = titleAt === -1 ? blocks : blocks.filter((_, index) => index !== titleAt);
-  return body.map(renderBlock).join("");
+export function renderProse(markdown, lang, options = {}) {
+  let blocks = sectionBlocks(markdown, lang);
+  if (options.skipFirstH2) {
+    const titleAt = blocks.findIndex((block) => block.type === "h" && block.level === 2);
+    if (titleAt !== -1) blocks = blocks.filter((_, index) => index !== titleAt);
+  }
+  return blocks.map(renderBlock).join("");
 }
 
-export function renderProjects(markdown) {
-  const blocks = parseBlocks(markdown);
+export function renderProjects(markdown, lang) {
+  const blocks = sectionBlocks(markdown, lang);
   const cards = [];
   let current = null;
 

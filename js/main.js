@@ -14,25 +14,73 @@ function fail(element, message) {
   element.innerHTML = `<p class="error">${message}</p>`;
 }
 
+function readLang() {
+  const param = new URLSearchParams(location.search).get("lang");
+  if (param === "en" || param === "ru") {
+    try {
+      localStorage.setItem("site-lang", param);
+    } catch (_) {
+      /* private mode */
+    }
+    return param;
+  }
+  try {
+    return localStorage.getItem("site-lang") === "en" ? "en" : "ru";
+  } catch (_) {
+    return "ru";
+  }
+}
+
+function withLang(page, lang) {
+  const file = page.split("?")[0];
+  return lang === "en" ? `${file}?lang=en` : file;
+}
+
+const lang = readLang();
 const page = document.body.dataset.page;
+document.documentElement.lang = lang;
+
+const here = location.pathname.split("/").pop() || "index.html";
+
+for (const link of document.querySelectorAll(".lang a")) {
+  const target = link.dataset.lang === "en" ? "en" : "ru";
+  link.href = withLang(here, target);
+  if (target === lang) link.setAttribute("aria-current", "true");
+  else link.removeAttribute("aria-current");
+}
+
+for (const link of document.querySelectorAll(".nav a, .brand")) {
+  link.href = withLang(link.getAttribute("href"), lang);
+  if (link.dataset.ru && link.dataset.en) {
+    link.textContent = lang === "en" ? link.dataset.en : link.dataset.ru;
+  }
+}
+
+const nav = document.querySelector(".nav");
+if (nav) nav.setAttribute("aria-label", lang === "en" ? "Sections" : "Разделы");
+
+const errors = {
+  home: { ru: "Не удалось загрузить страницу.", en: "Could not load the page." },
+  cv: { ru: "Не удалось загрузить CV.", en: "Could not load the CV." },
+  projects: { ru: "Не удалось загрузить проекты.", en: "Could not load projects." },
+};
 
 function applySiteTitle(markdown) {
-  const title = siteTitle(markdown);
+  const title = siteTitle(markdown, lang);
   if (!title) return;
   const brand = document.querySelector(".brand");
   if (brand) brand.textContent = title;
   const portrait = document.querySelector(".portrait");
   if (portrait) portrait.alt = title;
-  const suffix = document.body.dataset.titleSuffix;
+  const suffix =
+    page === "cv" ? "CV" : page === "projects" ? (lang === "en" ? "Projects" : "Проекты") : "";
   document.title = suffix ? `${title} — ${suffix}` : title;
 }
 
-let aboutMarkdown = null;
-
 async function loadAbout() {
-  if (!aboutMarkdown) aboutMarkdown = await load("data/about.md");
-  applySiteTitle(aboutMarkdown);
-  return aboutMarkdown;
+  const markdown = await load("data/about.md");
+  applySiteTitle(markdown);
+  return markdown;
 }
 
 if (page === "home") {
@@ -43,40 +91,32 @@ if (page === "home") {
       loadAbout(),
       load("data/contacts.md"),
     ]);
-    about.innerHTML = renderProse(aboutText);
-    contacts.innerHTML = renderProse(contactText);
+    about.innerHTML = renderProse(aboutText, lang, { skipFirstH2: true });
+    contacts.innerHTML = renderProse(contactText, lang);
   } catch (error) {
     console.error(error);
-    fail(about, "Не удалось загрузить страницу.");
+    fail(about, errors.home[lang]);
   }
-} else {
-  loadAbout().catch((error) => console.error(error));
 }
 
 if (page === "cv") {
-  const lang = new URLSearchParams(window.location.search).get("lang") === "en" ? "en" : "ru";
-  document.documentElement.lang = lang;
   const root = document.getElementById("cv");
-
-  for (const link of document.querySelectorAll(".lang a")) {
-    if (link.dataset.lang === lang) link.setAttribute("aria-current", "true");
-    else link.removeAttribute("aria-current");
-  }
-
+  loadAbout().catch((error) => console.error(error));
   try {
     root.innerHTML = renderCv(await load(`data/CV/${lang}.md`));
   } catch (error) {
     console.error(error);
-    fail(root, "Не удалось загрузить CV.");
+    fail(root, errors.cv[lang]);
   }
 }
 
 if (page === "projects") {
   const root = document.getElementById("projects");
+  loadAbout().catch((error) => console.error(error));
   try {
-    root.innerHTML = renderProjects(await load("data/projects.md"));
+    root.innerHTML = renderProjects(await load("data/projects.md"), lang);
   } catch (error) {
     console.error(error);
-    fail(root, "Не удалось загрузить проекты.");
+    fail(root, errors.projects[lang]);
   }
 }
