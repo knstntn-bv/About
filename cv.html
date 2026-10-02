@@ -47,6 +47,21 @@
           </button>
         </div>
       </header>
+      <div class="cv-toolbar">
+        <p id="pdf-status" class="pdf-status" role="status" hidden></p>
+        <button
+          type="button"
+          id="download-pdf"
+          class="pdf-download"
+          hidden
+          data-ru="Скачать PDF"
+          data-en="Download PDF"
+          data-ru-busy="Готовлю PDF…"
+          data-en-busy="Preparing PDF…"
+          data-ru-error="Не удалось подготовить PDF."
+          data-en-error="Could not prepare the PDF."
+        >Скачать PDF</button>
+      </div>
       <main id="cv" class="cv"></main>
     </div>
     <script type="module" src="js/main.js"></script>

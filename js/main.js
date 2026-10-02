@@ -1,3 +1,4 @@
+import { downloadCvPdf } from "./cv-pdf.js";
 import { renderCv, renderProse, renderProjects, siteTitle } from "./render.js";
 
 function asset(path) {
@@ -53,6 +54,12 @@ for (const link of document.querySelectorAll(".nav a, .brand")) {
   link.href = withLang(link.getAttribute("href"), lang);
   if (link.dataset.ru && link.dataset.en) {
     link.textContent = lang === "en" ? link.dataset.en : link.dataset.ru;
+  }
+}
+
+for (const button of document.querySelectorAll(".pdf-download")) {
+  if (button.dataset.ru && button.dataset.en) {
+    button.textContent = lang === "en" ? button.dataset.en : button.dataset.ru;
   }
 }
 
@@ -160,9 +167,39 @@ if (page === "home") {
 
 if (page === "cv") {
   const root = document.getElementById("cv");
+  const button = document.getElementById("download-pdf");
+  const status = document.getElementById("pdf-status");
   loadAbout().catch((error) => console.error(error));
   try {
-    root.innerHTML = renderCv(await load(`data/CV/${lang}.md`));
+    const markdown = await load(`data/CV/${lang}.md`);
+    root.innerHTML = renderCv(markdown);
+    if (button) {
+      button.hidden = false;
+      button.addEventListener("click", async () => {
+        if (button.disabled) return;
+        const idle = lang === "en" ? button.dataset.en : button.dataset.ru;
+        const busy = lang === "en" ? button.dataset.enBusy : button.dataset.ruBusy;
+        const message = lang === "en" ? button.dataset.enError : button.dataset.ruError;
+        button.disabled = true;
+        button.textContent = busy;
+        if (status) {
+          status.hidden = true;
+          status.textContent = "";
+        }
+        try {
+          await downloadCvPdf(markdown, lang);
+        } catch (error) {
+          console.error(error);
+          if (status) {
+            status.hidden = false;
+            status.textContent = message;
+          }
+        } finally {
+          button.disabled = false;
+          button.textContent = idle;
+        }
+      });
+    }
   } catch (error) {
     console.error(error);
     fail(root, errors.cv[lang]);

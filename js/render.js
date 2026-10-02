@@ -60,7 +60,7 @@ function isDateLine(text) {
   return /\d{4}/.test(plain);
 }
 
-function skillsText(text) {
+export function skillsText(text) {
   const match = text.match(/^\*([^*\n]+)\*$/);
   if (!match) return null;
   const inner = match[1].trim();
@@ -162,14 +162,14 @@ function entryHtml(entry) {
   return `<article class="entry"><div class="entry-head"><div class="entry-titles"><h3>${inline(entry.title)}</h3>${org}</div>${date}</div>${body}</article>`;
 }
 
-function renderEntries(blocks) {
-  const entries = [];
+function groupEntries(blocks) {
+  const nodes = [];
   let current = null;
 
   for (const block of blocks) {
     if (block.type === "h" && block.level === 2) {
-      current = { title: block.text, subtitle: "", date: "", body: [] };
-      entries.push(current);
+      current = { kind: "entry", title: block.text, subtitle: "", date: "", body: [] };
+      nodes.push(current);
       continue;
     }
     if (!current) continue;
@@ -195,41 +195,61 @@ function renderEntries(blocks) {
     current.body.push(block);
   }
 
-  return `<div class="entries">${entries.map(entryHtml).join("")}</div>`;
+  return nodes;
 }
 
-function renderLoose(blocks) {
-  let html = "";
+function groupLoose(blocks) {
+  const nodes = [];
   for (const block of blocks) {
     if (block.type !== "p") {
-      html += renderBlock(block);
+      nodes.push({ kind: "block", block });
       continue;
     }
     const lines = block.text.split("\n");
     const year = trailingYear(lines[0]);
     if (!year) {
-      html += renderBlock(block);
+      nodes.push({ kind: "block", block });
       continue;
     }
     const rest = lines.slice(1).join("\n").trim();
-    html += entryHtml({
+    nodes.push({
+      kind: "entry",
       title: year.title,
       subtitle: "",
       date: year.year,
       body: rest ? [{ type: "p", text: rest }] : [],
     });
   }
+  return nodes;
+}
+
+function sectionNodes(blocks) {
+  const hasEntries = blocks.some((block) => block.type === "h" && block.level === 2);
+  return hasEntries ? groupEntries(blocks) : groupLoose(blocks);
+}
+
+function renderNodes(nodes) {
+  const html = nodes
+    .map((node) => (node.kind === "entry" ? entryHtml(node) : renderBlock(node.block)))
+    .join("");
   return `<div class="entries">${html}</div>`;
 }
 
 function renderSection(section) {
-  const hasEntries = section.blocks.some(
-    (block) => block.type === "h" && block.level === 2
-  );
-  const body = hasEntries
-    ? renderEntries(section.blocks)
-    : renderLoose(section.blocks);
-  return `<section class="cv-section"><h2>${inline(section.title)}</h2>${body}</section>`;
+  return `<section class="cv-section"><h2>${inline(section.title)}</h2>${renderNodes(section.nodes)}</section>`;
+}
+
+export function cvDocument(markdown) {
+  const doc = parseCv(markdown);
+  return {
+    name: doc.name,
+    role: doc.role,
+    contacts: doc.contacts,
+    sections: doc.sections.map((section) => ({
+      title: section.title,
+      nodes: sectionNodes(section.blocks),
+    })),
+  };
 }
 
 function parseCv(markdown) {
@@ -335,7 +355,7 @@ export function renderProjects(markdown, lang) {
 }
 
 export function renderCv(markdown) {
-  const doc = parseCv(markdown);
+  const doc = cvDocument(markdown);
   const contacts = doc.contacts
     .map((block) => `<p>${inline(block.text)}</p>`)
     .join("");
