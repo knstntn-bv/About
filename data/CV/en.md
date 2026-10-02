@@ -1,13 +1,11 @@
 # Konstantin Bocharov - Senior Product Manager | Product Lead
 
 ✉️ [konstantin.bv@outlook.com](mailto:konstantin.bv@outlook.com)
-
 📱 +7 (926) 264-43-96 - WhatsApp or Telegram are welcome
-
 🏠 Moscow, Russia, planning relocation to Belgrade, Serbia, remote work option is preferred
 
 # About me
-
+---
 I've been managing products since 2010, with experience across classic IT (Yandex, Kaspersky), enterprise (Globus, Sber), and startups (Yandex bootcamp). I have a technical background and began my career as a business analyst.
 
 I’ve worked on web and mobile apps, primarily in B2C. I have deep expertise in launching products from scratch and scaling them to hundreds of thousands of users - building teams and processes along the way.
@@ -17,7 +15,6 @@ Strong in finding product-market fit, mapping user journeys, and reducing fricti
 I also have mentoring experience in product management (Women in Tech program). Currently I’m working on personal projects with the help of AI: a Cursor-like tool for product managers and a tournament management system for fencing clubs.
 
 # Experience
-
 ---
 ## Product Owner
 ### Yango (Yandex)
@@ -191,18 +188,3 @@ Developed independently with the help of AI tools (Cursor, Lovable).
 - The preparation of technical specifications and implementation has been automated using agents, allowing a stronger focus on discovery and business requirements
 
 *Skills: Product management · New Product Launch · Roadmap · Customer Development · AI assisted coding*
-
-## Life Balance
-
-_Feb 2015 - Apr 2015_
-
-**LifeBalace** - life coaching online service with live coaches support
-
-Built in Yandex Tolstoy Camp startup bootcamp
-
-- Developed product hypothesis and refined it via customer interviewing
-- Launched MVP, confirmed value by product sales
-- Implemented product analytics tools and estabilished customer relations flows
-- Created pitch presentation for venture audience
-
-*Skills: Product management · New Product Launch · Customer Development · Competitors Analysis · Unit Economics · User Stories · Lean Startup · Agile · Business Development*

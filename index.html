@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Константин Бочаров</title>
+    <meta name="description" content="Константин Бочаров, менеджер продукта">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560;9..144,650&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+  </head>
+  <body data-page="home">
+    <div class="wrap">
+      <header class="site-header">
+        <a class="brand" href="index.html">Константин Бочаров</a>
+        <div class="header-tools">
+          <nav class="nav" aria-label="Разделы">
+            <a href="index.html" aria-current="page">Главная</a>
+            <a href="cv.html">CV</a>
+            <a href="projects.html">Проекты</a>
+          </nav>
+          <p class="lang" aria-hidden="true">
+            <a href="cv.html?lang=ru" data-lang="ru" lang="ru">RU</a>
+            <a href="cv.html?lang=en" data-lang="en" lang="en">EN</a>
+          </p>
+        </div>
+      </header>
+      <main>
+        <div class="intro">
+          <img class="portrait" src="data/me.jpg" width="640" height="640" alt="Константин Бочаров">
+          <div id="about" class="prose"></div>
+        </div>
+        <div id="contacts" class="contacts prose"></div>
+      </main>
+    </div>
+    <script type="module" src="js/main.js"></script>
+  </body>
+</html>
