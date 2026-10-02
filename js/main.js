@@ -59,6 +59,65 @@ for (const link of document.querySelectorAll(".nav a, .brand")) {
 const nav = document.querySelector(".nav");
 if (nav) nav.setAttribute("aria-label", lang === "en" ? "Sections" : "Разделы");
 
+const themeLabels = {
+  light: { ru: "Включить светлую тему", en: "Switch to light theme" },
+  dark: { ru: "Включить тёмную тему", en: "Switch to dark theme" },
+};
+
+function readStoredTheme() {
+  try {
+    const value = localStorage.getItem("site-theme");
+    return value === "light" || value === "dark" ? value : null;
+  } catch (_) {
+    return null;
+  }
+}
+
+function currentTheme() {
+  return document.documentElement.dataset.theme === "light" ? "light" : "dark";
+}
+
+function syncThemeChrome(theme) {
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if (meta) meta.content = theme === "light" ? "#f7f4f1" : "#110e0e";
+  const icon = document.querySelector('link[rel="icon"]');
+  if (icon) icon.href = asset(theme === "light" ? "favicon-light.svg" : "favicon.svg");
+  const button = document.querySelector(".theme-toggle");
+  if (!button) return;
+  const next = theme === "dark" ? "light" : "dark";
+  button.setAttribute("aria-label", themeLabels[next][lang]);
+}
+
+function applyTheme(theme, persist) {
+  document.documentElement.dataset.theme = theme;
+  syncThemeChrome(theme);
+  if (!persist) return;
+  try {
+    localStorage.setItem("site-theme", theme);
+  } catch (_) {
+    /* private mode */
+  }
+}
+
+for (const el of document.querySelectorAll(".theme-toggle [data-ru]")) {
+  el.textContent = lang === "en" ? el.dataset.en : el.dataset.ru;
+}
+
+const themeButton = document.querySelector(".theme-toggle");
+if (themeButton) {
+  themeButton.addEventListener("click", () => {
+    applyTheme(currentTheme() === "dark" ? "light" : "dark", true);
+  });
+}
+
+syncThemeChrome(currentTheme());
+
+if (!readStoredTheme()) {
+  window.matchMedia("(prefers-color-scheme: light)").addEventListener("change", (event) => {
+    if (!readStoredTheme()) applyTheme(event.matches ? "light" : "dark", false);
+  });
+}
+
 const errors = {
   home: { ru: "Не удалось загрузить страницу.", en: "Could not load the page." },
   cv: { ru: "Не удалось загрузить CV.", en: "Could not load the CV." },
