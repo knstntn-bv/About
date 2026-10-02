@@ -183,6 +183,8 @@ html[data-theme="light"] .theme-toggle .to-dark { display: inline; }
 @media (prefers-color-scheme: light) {
   html:not([data-theme]) .theme-toggle .to-light { display: none; }
   html:not([data-theme]) .theme-toggle .to-dark { display: inline; }
+}
+
 .cv-toolbar {
   display: flex;
   flex-wrap: wrap;
