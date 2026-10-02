@@ -33,7 +33,7 @@ function readLang() {
 
 function withLang(page, lang) {
   const file = page.split("?")[0];
-  return lang === "en" ? `${file}?lang=en` : file;
+  return `${file}?lang=${lang}`;
 }
 
 const lang = readLang();
