@@ -5,7 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Константин Бочаров — Проекты</title>
     <meta name="description" content="Проекты Константина Бочарова">
+    <meta name="theme-color" content="#110e0e">
     <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <script>
+      (function () {
+        var theme = "dark";
+        try {
+          var stored = localStorage.getItem("site-theme");
+          if (stored === "light" || stored === "dark") theme = stored;
+          else if (window.matchMedia("(prefers-color-scheme: light)").matches) theme = "light";
+        } catch (e) {}
+        document.documentElement.setAttribute("data-theme", theme);
+        var meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute("content", theme === "light" ? "#f7f4f1" : "#110e0e");
+        var icon = document.querySelector('link[rel="icon"]');
+        if (icon && theme === "light") icon.setAttribute("href", "favicon-light.svg");
+      })();
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560;9..144,650&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet">
@@ -25,6 +41,10 @@
             <a href="projects.html?lang=ru" data-lang="ru" lang="ru" aria-current="true">RU</a>
             <a href="projects.html?lang=en" data-lang="en" lang="en">EN</a>
           </p>
+          <button type="button" class="theme-toggle">
+            <span class="to-light" data-ru="Светлая" data-en="Light">Светлая</span>
+            <span class="to-dark" data-ru="Тёмная" data-en="Dark">Тёмная</span>
+          </button>
         </div>
       </header>
       <main id="projects" class="projects"></main>

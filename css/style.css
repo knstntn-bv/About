@@ -2,15 +2,44 @@
   --bg: #110e0e;
   --text: #f6f3f1;
   --muted: #a39c98;
-  --red: #ff3b30;
+  --red: #c36d65;
+  --on-red: #1a1210;
   --line: rgba(246, 243, 241, 0.14);
+  --portrait: #1c1818;
   --measure: 50rem;
   color-scheme: dark;
 }
 
+html[data-theme="light"] {
+  --bg: #f7f4f1;
+  --text: #1c1614;
+  --muted: #6e6560;
+  --red: #964940;
+  --on-red: #fff;
+  --line: rgba(28, 22, 20, 0.12);
+  --portrait: #e6e0dc;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: light) {
+  html:not([data-theme]) {
+    --bg: #f7f4f1;
+    --text: #1c1614;
+    --muted: #6e6560;
+    --red: #964940;
+    --on-red: #fff;
+    --line: rgba(28, 22, 20, 0.12);
+    --portrait: #e6e0dc;
+    color-scheme: light;
+  }
+}
+
 * { box-sizing: border-box; }
 
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  background: var(--bg);
+}
 
 body {
   margin: 0;
@@ -30,7 +59,7 @@ body::before {
 
 ::selection {
   background: var(--red);
-  color: #fff;
+  color: var(--on-red);
 }
 
 :focus-visible {
@@ -127,6 +156,33 @@ body[data-page="cv"] {
   color: var(--red);
 }
 
+.theme-toggle {
+  appearance: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  line-height: inherit;
+  cursor: pointer;
+}
+
+.theme-toggle:hover {
+  color: var(--red);
+}
+
+.theme-toggle .to-dark { display: none; }
+
+html[data-theme="light"] .theme-toggle .to-light { display: none; }
+html[data-theme="light"] .theme-toggle .to-dark { display: inline; }
+
+@media (prefers-color-scheme: light) {
+  html:not([data-theme]) .theme-toggle .to-light { display: none; }
+  html:not([data-theme]) .theme-toggle .to-dark { display: inline; }
 .cv-toolbar {
   display: flex;
   flex-wrap: wrap;
@@ -181,7 +237,7 @@ body[data-page="cv"] {
   aspect-ratio: 1;
   object-fit: cover;
   object-position: center 15%;
-  background: #1c1818;
+  background: var(--portrait);
 }
 
 .prose p {
@@ -407,7 +463,7 @@ body[data-page="cv"] {
   .cv-role,
   .entry-titles h3,
   .entry-body li::marker {
-    color: #9d1c1c;
+    color: #964940;
   }
 
   .cv-contacts,
