@@ -270,7 +270,7 @@ function sectionPieces(section) {
   return [{ stack: [head, pieces[0]], unbreakable: true }, ...pieces.slice(1)];
 }
 
-export function pdfFilename(name, lang) {
+export function pdfFilename(name, lang, kind = "cv") {
   const mapped = String(name).replace(/[А-ЯЁа-яё]/g, (char) => {
     const lower = char.toLowerCase();
     const latin = RU_LATIN[lower] || "";
@@ -284,7 +284,8 @@ export function pdfFilename(name, lang) {
     .replace(/^-|-$/g, "");
   const base = slug || "CV";
   const code = lang === "en" ? "EN" : "RU";
-  return `${base}-CV-${code}.pdf`;
+  const label = kind === "resume" ? "Resume" : "CV";
+  return `${base}-${label}-${code}.pdf`;
 }
 
 export function buildCvPdf(markdown) {
@@ -379,10 +380,10 @@ function ensurePdfMake() {
   return pdfMakeLoading;
 }
 
-export async function downloadCvPdf(markdown, lang) {
+export async function downloadCvPdf(markdown, lang, kind = "cv") {
   const pdfMake = await ensurePdfMake();
   const definition = buildCvPdf(markdown);
-  const filename = pdfFilename(cvDocument(markdown).name, lang);
+  const filename = pdfFilename(cvDocument(markdown).name, lang, kind);
   await new Promise((resolve, reject) => {
     try {
       pdfMake.createPdf(definition).download(filename, () => resolve());

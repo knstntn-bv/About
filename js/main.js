@@ -128,6 +128,7 @@ if (!readStoredTheme()) {
 const errors = {
   home: { ru: "Не удалось загрузить страницу.", en: "Could not load the page." },
   cv: { ru: "Не удалось загрузить CV.", en: "Could not load the CV." },
+  resume: { ru: "Не удалось загрузить резюме.", en: "Could not load the resume." },
   projects: { ru: "Не удалось загрузить проекты.", en: "Could not load projects." },
 };
 
@@ -165,44 +166,57 @@ if (page === "home") {
   }
 }
 
+function bindPdfDownload(button, markdown, kind, status) {
+  if (!button) return;
+  button.hidden = false;
+  button.addEventListener("click", async () => {
+    if (button.disabled) return;
+    const buttons = [...document.querySelectorAll(".pdf-download")];
+    const idle = lang === "en" ? button.dataset.en : button.dataset.ru;
+    const busy = lang === "en" ? button.dataset.enBusy : button.dataset.ruBusy;
+    const message = lang === "en" ? button.dataset.enError : button.dataset.ruError;
+    for (const item of buttons) item.disabled = true;
+    button.textContent = busy;
+    if (status) {
+      status.hidden = true;
+      status.textContent = "";
+    }
+    try {
+      await downloadCvPdf(markdown, lang, kind);
+    } catch (error) {
+      console.error(error);
+      if (status) {
+        status.hidden = false;
+        status.textContent = message;
+      }
+    } finally {
+      for (const item of buttons) item.disabled = false;
+      button.textContent = idle;
+    }
+  });
+}
+
 if (page === "cv") {
   const root = document.getElementById("cv");
-  const button = document.getElementById("download-pdf");
   const status = document.getElementById("pdf-status");
   loadAbout().catch((error) => console.error(error));
   try {
     const markdown = await load(`data/CV/${lang}.md`);
     root.innerHTML = renderCv(markdown);
-    if (button) {
-      button.hidden = false;
-      button.addEventListener("click", async () => {
-        if (button.disabled) return;
-        const idle = lang === "en" ? button.dataset.en : button.dataset.ru;
-        const busy = lang === "en" ? button.dataset.enBusy : button.dataset.ruBusy;
-        const message = lang === "en" ? button.dataset.enError : button.dataset.ruError;
-        button.disabled = true;
-        button.textContent = busy;
-        if (status) {
-          status.hidden = true;
-          status.textContent = "";
-        }
-        try {
-          await downloadCvPdf(markdown, lang);
-        } catch (error) {
-          console.error(error);
-          if (status) {
-            status.hidden = false;
-            status.textContent = message;
-          }
-        } finally {
-          button.disabled = false;
-          button.textContent = idle;
-        }
-      });
-    }
+    bindPdfDownload(document.getElementById("download-pdf"), markdown, "cv", status);
   } catch (error) {
     console.error(error);
     fail(root, errors.cv[lang]);
+  }
+  try {
+    const resume = await load(`data/resume/${lang}.md`);
+    bindPdfDownload(document.getElementById("download-resume"), resume, "resume", status);
+  } catch (error) {
+    console.error(error);
+    if (status && status.hidden) {
+      status.hidden = false;
+      status.textContent = errors.resume[lang];
+    }
   }
 }
 
