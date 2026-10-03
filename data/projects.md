@@ -5,6 +5,7 @@ Cистема для проведения соревнований по фехт
 [fencing-scorer.konbo.me](http://fencing-scorer.konbo.me)
 
 ### Screenshots
+- data/Screenshots/Fencing Scorer/counter.png
 - data/Screenshots/Fencing Scorer/1.png
 - data/Screenshots/Fencing Scorer/2.png
 - data/Screenshots/Fencing Scorer/3.png
