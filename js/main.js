@@ -220,11 +220,87 @@ if (page === "cv") {
   }
 }
 
+function bindShots(root) {
+  const buttons = [...root.querySelectorAll(".shot")];
+  if (!buttons.length) return;
+
+  const copy = {
+    close: lang === "en" ? "Close" : "Закрыть",
+    prev: lang === "en" ? "Previous screenshot" : "Предыдущий скриншот",
+    next: lang === "en" ? "Next screenshot" : "Следующий скриншот",
+  };
+
+  const dialog = document.createElement("dialog");
+  dialog.className = "shot-viewer";
+  dialog.innerHTML =
+    '<div class="shot-stage"><button type="button" class="shot-close"></button><button type="button" class="shot-nav shot-prev"></button><img class="shot-full" alt=""><button type="button" class="shot-nav shot-next"></button></div>';
+  const closeButton = dialog.querySelector(".shot-close");
+  const prevButton = dialog.querySelector(".shot-prev");
+  const nextButton = dialog.querySelector(".shot-next");
+  const full = dialog.querySelector(".shot-full");
+  closeButton.textContent = copy.close;
+  prevButton.setAttribute("aria-label", copy.prev);
+  nextButton.setAttribute("aria-label", copy.next);
+  prevButton.textContent = "‹";
+  nextButton.textContent = "›";
+  document.body.appendChild(dialog);
+
+  let group = [];
+  let index = 0;
+
+  function paint() {
+    const button = group[index];
+    const image = button.querySelector("img");
+    full.src = image.getAttribute("src");
+    full.alt = button.getAttribute("aria-label") || "";
+    const single = group.length < 2;
+    prevButton.hidden = single;
+    nextButton.hidden = single;
+  }
+
+  function show(button) {
+    group = [...button.closest(".shots").querySelectorAll(".shot")];
+    index = Math.max(0, group.indexOf(button));
+    paint();
+    if (!dialog.open) dialog.showModal();
+  }
+
+  function step(delta) {
+    if (group.length < 2) return;
+    index = (index + delta + group.length) % group.length;
+    paint();
+  }
+
+  for (const button of buttons) {
+    button.addEventListener("click", () => show(button));
+  }
+  closeButton.addEventListener("click", () => dialog.close());
+  prevButton.addEventListener("click", () => step(-1));
+  nextButton.addEventListener("click", () => step(1));
+  dialog.addEventListener("click", (event) => {
+    if (event.target === dialog) dialog.close();
+  });
+  dialog.addEventListener("close", () => {
+    full.removeAttribute("src");
+    full.alt = "";
+  });
+  dialog.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      step(-1);
+    } else if (event.key === "ArrowRight") {
+      event.preventDefault();
+      step(1);
+    }
+  });
+}
+
 if (page === "projects") {
   const root = document.getElementById("projects");
   loadAbout().catch((error) => console.error(error));
   try {
     root.innerHTML = renderProjects(await load("data/projects.md"), lang);
+    bindShots(root);
   } catch (error) {
     console.error(error);
     fail(root, errors.projects[lang]);

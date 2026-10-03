@@ -332,25 +332,83 @@ export function renderProse(markdown, lang, options = {}) {
   return blocks.map(renderBlock).join("");
 }
 
+const SHOT_LIMIT = 10;
+
+function isShotHeading(block) {
+  return (
+    block.type === "h" &&
+    block.level === 3 &&
+    stripMarkers(block.text).toLowerCase() === "screenshots"
+  );
+}
+
+function shotPath(raw) {
+  const value = String(raw).trim();
+  if (!value || /[\u0000-\u001f]/.test(value)) return "";
+  if (/^[a-z][a-z0-9+.-]*:/i.test(value)) return "";
+  if (value.startsWith("/") || value.includes("\\")) return "";
+  const parts = value.split("/");
+  if (parts.some((part) => !part || part === "." || part === "..")) return "";
+  if (!/\.(png|jpe?g|webp|gif)$/i.test(parts[parts.length - 1])) return "";
+  return value;
+}
+
+function collectShots(card, block) {
+  const lines =
+    block.type === "ul" ? block.items : block.type === "p" ? block.text.split("\n") : [];
+  for (const line of lines) {
+    if (card.shots.length >= SHOT_LIMIT) return;
+    const path = shotPath(line);
+    if (path) card.shots.push(path);
+  }
+}
+
+function shotsHtml(title, shots, lang) {
+  if (!shots.length) return "";
+  const region = lang === "en" ? "Screenshots" : "Скриншоты";
+  const open = lang === "en" ? "Open screenshot" : "Открыть скриншот";
+  const name = stripMarkers(title);
+  const items = shots
+    .map((path, index) => {
+      const src = escapeHtml(encodeURI(path));
+      const label = escapeHtml(`${open} ${index + 1}: ${name}`);
+      return `<li><button type="button" class="shot" aria-label="${label}"><img src="${src}" alt=""></button></li>`;
+    })
+    .join("");
+  return `<div class="shots" role="region" aria-label="${escapeHtml(region)}"><ul class="shots-track">${items}</ul></div>`;
+}
+
 export function renderProjects(markdown, lang) {
   const blocks = sectionBlocks(markdown, lang);
   const cards = [];
   let current = null;
+  let shots = false;
 
   for (const block of blocks) {
     if (block.type === "h" && block.level === 2) {
-      current = { title: block.text, body: [] };
+      current = { title: block.text, body: [], shots: [] };
       cards.push(current);
+      shots = false;
       continue;
     }
-    if (current) current.body.push(block);
+    if (!current) continue;
+    if (isShotHeading(block)) {
+      shots = true;
+      continue;
+    }
+    if (block.type === "h") shots = false;
+    if (shots) {
+      collectShots(current, block);
+      continue;
+    }
+    current.body.push(block);
   }
 
   return cards
-    .map(
-      (card) =>
-        `<article class="project"><h2>${inline(card.title)}</h2><div class="project-body">${card.body.map(renderBlock).join("")}</div></article>`
-    )
+    .map((card) => {
+      const body = card.body.map(renderBlock).join("");
+      return `<article class="project"><h2>${inline(card.title)}</h2><div class="project-body">${body}</div>${shotsHtml(card.title, card.shots, lang)}</article>`;
+    })
     .join("");
 }
 
