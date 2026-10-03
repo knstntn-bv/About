@@ -14,7 +14,7 @@ Strong in finding product-market fit, mapping user journeys, and reducing fricti
 
 I also have mentoring experience in product management (Women in Tech program). Currently I’m working on personal projects with the help of AI: a Cursor-like tool for product managers and a tournament management system for fencing clubs.
 
-# Experience
+# Skills & Expertise
 ---
 **Skills**: Product Management · Product Strategy · Launching New Products · Customer Development · CJM · Jobs-to-be-Done · User Stories · RICE · Unit Economics · A/B-testing · Competitive Analysis · Lean · Agile · SCRUM · Kanban · Team Management · Business Development · Business Analysis
 
