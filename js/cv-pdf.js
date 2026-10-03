@@ -171,20 +171,56 @@ function formatDate(date) {
   return `${match[1]} -\n${match[2]}`;
 }
 
-function pair(date, content, bottom) {
+function pair(date, content, bottom, leftStyle = "date") {
   const stack = Array.isArray(content) ? content : [content];
   return {
     columns: [
       {
         width: DATE_W,
         text: date || "",
-        style: "date",
+        style: leftStyle,
       },
       { width: "*", stack },
     ],
     columnGap: COL_GAP,
     margin: [0, 0, 0, bottom],
   };
+}
+
+function factLine(text) {
+  if (!text || text.includes("\n")) return null;
+  const match = /^\*\*([^*]+)\*\*\s*:\s*(.+)$/.exec(text.trim());
+  if (!match) return null;
+  const label = match[1].trim();
+  const value = match[2].trim();
+  if (!label || !value) return null;
+  return { label, value };
+}
+
+function isFactSection(section) {
+  return (
+    section.nodes.length > 0 &&
+    section.nodes.every(
+      (node) => node.kind === "block" && node.block.type === "p" && factLine(node.block.text)
+    )
+  );
+}
+
+function factPieces(section) {
+  const rows = section.nodes.map((node, index, all) => {
+    const fact = factLine(node.block.text);
+    return {
+      ...pair(
+        fact.label,
+        { text: richText(fact.value), style: "body" },
+        index === all.length - 1 ? 8 : 4,
+        "fact"
+      ),
+      unbreakable: true,
+    };
+  });
+  const head = sectionHead(section.title);
+  return [{ stack: [head, rows[0]], unbreakable: true }, ...rows.slice(1)];
 }
 
 function bullet(item) {
@@ -264,6 +300,7 @@ function nodePieces(node) {
 }
 
 function sectionPieces(section) {
+  if (isFactSection(section)) return factPieces(section);
   const head = sectionHead(section.title);
   const pieces = section.nodes.flatMap(nodePieces);
   if (!pieces.length) return [head];
@@ -323,6 +360,12 @@ export function buildCvPdf(markdown) {
         alignment: "right",
         lineHeight: 1.2,
         margin: [0, 2, 0, 0],
+      },
+      fact: {
+        fontSize: 9,
+        bold: true,
+        alignment: "right",
+        margin: [0, 0.5, 0, 0],
       },
       body: { fontSize: 9, lineHeight: 1.25 },
       skills: { fontSize: 8, italics: true, color: MUTED, lineHeight: 1.25 },
