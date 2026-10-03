@@ -16,6 +16,17 @@ I also have mentoring experience in product management (Women in Tech program). 
 
 # Experience
 ---
+**Skills**: Product Management · Product Strategy · Launching New Products · Customer Development · CJM · Jobs-to-be-Done · User Stories · RICE · Unit Economics · A/B-testing · Competitive Analysis · Lean · Agile · SCRUM · Kanban · Team Management · Business Development · Business Analysis
+
+**Technologies**: iOS · Android · Web · Computer Vision · OCR · LLM · AI · Agents
+
+**Tools**: Firebase · Yandex AppMetrica · Amplitude · Jira · LM Studio · Cursor · Claude
+
+**Language**: English - C1
+
+
+# Experience
+---
 ## Product Owner
 ### Yango (Yandex)
 
@@ -33,7 +44,6 @@ Focusing on increasing user LTV by delivering features tailored to the specific 
 - Increased the number of navigation sessions by 9% by introducing live traffic light information in Tashkent.
 - Tripled the number of taxi orders placed from the Navigator app in Turkey by introducing additional entry points into the booking flow
 
-*Skills: Product Management · Product Strategy · Customer Development · CJM · Jobs-to-be-Done · A/B-testing · OKR · Business Development · AI · LLM · Agents*
 
 ## Product Owner
 ### Kaspersky Lab
@@ -51,7 +61,6 @@ Team: 30+ people – product/analysts, project manager, architect, frontend/back
 - Reduced churn by 23% with flexible promotional offers based on user research and international markets studies
 - Improved activation on additional devices to 70% by refining the CJM and user metrics optimization
 
-*Skills: Product Management · Product Strategy · Customer Development · CJM · Jobs-to-be-Done · RICE · A/B-testing · Unit Economics · Team Management · Business Development · Business Analysis*
 
 ## Product Owner
 ### SBER
@@ -70,7 +79,6 @@ Team: 10 people – analyst, UX designer, frontend/backend devs, QA, with ad-hoc
 - Boosted active user conversion by 10x through CJM analysis, setting up metrics collection and funnel optimization
 - Built the product team and set up Scrum processes
 
-*Skills: Product Management · Product Strategy · Launching New Products · Customer Development · CJM · Jobs-to-be-Done · RICE · A/B-testing · Competitors Analysis · SCRUM · Team Management · Business Development*
 
 ## Head of Mobile Products
 ### Globus Hypermarkets
@@ -80,12 +88,7 @@ Sep _2015 - Aug 2021_
 B2C Customer mobile app (500K MAU)
 [www.globus.ru/service/app/](https://www.globus.ru/service/app/)
 
-Objective: Launch and grow the mobile app for the retail chain customers (iOS/Android):
-
-- At the start (2015): to define product development strategy and long-term vision; to build the product team and to establish outsorced development team management
-- 2016: to deliver the first version of the app; introduced data-driven product management
-- 2017: to implement personal account and virtual loyalty card features
-- 2020: to support online shopping
+Objective: Launch and grow the mobile app for the retail chain customers (iOS/Android), defining the product strategy and long-term vision, building the product team and implementing data-driven product management
 
 Team: 2 in-house (design lead, technical product manager) + 8 outsourced developers
 
@@ -96,7 +99,6 @@ Achievements:
 - Enabled online ordering with home delivery just two weeks after the pandemic lockdown began
 - Increased average order value by implementing personalized offers for each customer
 
-*Skills: Product Management · Product Strategy · Launching New Products · Customer Development · CJM · User Stories · RICE · Unit Economics · A/B-testing · Competitors Analysis · Lean · Agile · Team Management*
 
 ## Analyst
 ### HeadHunter
@@ -108,12 +110,10 @@ B2C/B2B, Job portal
 
 Requirements management: interviewing stakeholders, identifying optimal user-centered solutions, detailing requirements, and planning implementation with developers.
 
-- Website redesign: developed a new structure for navigation and key pages
-- Implemented a protection system against service misuse by optimizing the employer role model
-- Delivered improvements to the customer and back office dashboards, expanded the functionality of mailings
-- Increased registration conversion by optimizing SEO pages
+- Contributed to major redesign of navigation and key pages
+- Implemented anti-abuse measures and improved CMS and employer tools
+- Enhanced SEO and registration conversion
 
-*Skills: Product Management · Customer Development · User Stories · A/B-testing · Lean · Agile · SCRUM · Business Analysis*
 
 ## Product Manager/Analyst
 ### ABBYY
@@ -129,12 +129,10 @@ Collaborated with partners to integrate their services into apps, promote apps i
 
 For custom products: conducted pre-sale analysis, researched client requirements, aligned specifications, and planned product integration into client infrastructure.
 
-- Delivered full-cycle development - from concept to release - of iOS and Android apps that reached top positions in App Store/Google Play rankings: Business Card Reader, TextGrabber, FineScanner
-- Implemented integrations of the applications with external services (social networks, Google, SalesForce, Evernote), participated in Google and Evernote partner programs
-- Drove the development of the Mobile OCR Engine technology product; created a new technology product, the Mobile Imaging SDK
-- Built a business product: the mobile client for the FlexiCapture ECM system
-
-*Skills: Product Management · Launching New Products · Customer Development · User Stories · A/B-testing · Competitors Analysis · Agile · SCRUM · Business Development · Business Analysis*
+- Led several mobile products from concept to top positions in App Store/Google Play (Business Card Reader, FineReader)
+- Integrated 3rd party services (Google Translate, Salesforce, Evernote)
+- Created new tech products: Mobile OCR Engine and Imaging SDK
+- Delivered custom mobile clients for document management systems (FlexiCapture)
 
 
 # Education
@@ -170,7 +168,6 @@ Developed independently with the help of AI tools (Cursor, Codex)
 
 - MVP was launched, improvements based on feedback were made
 
-*Skills: Product management · New Product Launch · Customer Development · Agentic development*
 
 ## Product Notebook
 
@@ -186,5 +183,3 @@ Developed independently with the help of AI tools (Cursor, Lovable).
 - MVP implemented, link published in thematic communities — feedback collected
 - Dogfooding: product management of the pet project is conducted directly within the application
 - The preparation of technical specifications and implementation has been automated using agents, allowing a stronger focus on discovery and business requirements
-
-*Skills: Product management · New Product Launch · Roadmap · Customer Development · AI assisted coding*
