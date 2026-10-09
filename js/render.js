@@ -259,15 +259,12 @@ function parseCv(markdown) {
   let role = "";
 
   if (blocks[index]?.type === "h" && blocks[index].level === 1) {
-    const title = blocks[index].text;
-    const splitAt = title.indexOf(" - ");
-    if (splitAt === -1) {
-      name = title;
-    } else {
-      name = title.slice(0, splitAt).trim();
-      role = title.slice(splitAt + 3).trim();
-    }
+    name = blocks[index].text;
     index += 1;
+    if (blocks[index]?.type === "h" && blocks[index].level === 2) {
+      role = blocks[index].text;
+      index += 1;
+    }
   }
 
   const contacts = [];
