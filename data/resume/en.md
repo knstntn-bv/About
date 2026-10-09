@@ -1,4 +1,5 @@
-# Konstantin Bocharov - Senior Product Manager | Product Lead
+# Konstantin Bocharov
+## Senior Product Manager | Product Lead
 
 ✉️ [konstantin.bv@outlook.com](mailto:konstantin.bv@outlook.com)
 📱 +7 (926) 264-43-96 - WhatsApp or Telegram are welcome
